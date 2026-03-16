@@ -1,7 +1,8 @@
-# taco-teste-fullstack
+# 🌮 TacoMex 8-Bit Shop
+
 Uma plataforma **full-stack de delivery de comida mexicana com temática retrô 8-bit**, desenvolvida utilizando tecnologias modernas e arquitetura desacoplada.
 
-Este repositório foi analisado sob a minha perspectiva como profissional de **QA (Quality Assurance)**, verificando aspectos como:
+Este repositório foi **avaliado sob perspectiva de QA (Quality Assurance)**, verificando:
 
 - funcionamento do **backend**
 - estabilidade do **frontend**
