@@ -1,14 +1,28 @@
 import { test, expect } from '@playwright/test';
 
+test.beforeAll(async ({ request }) => {
+    // Criando o usuário via API antes de todos os testes
+    await request.post('http://localhost:5173/api/auth/register', {
+        data: {
+            name: "Gintoki Machado",
+            email: "gintokimachado04@gmail.com",
+            password: "150515@teste",
+            phone: "00 1234-5678"
+        }
+    });
+});
+
 test('Adicionando cupom em compras', async ({ page }) => {
     await page.goto('http://localhost:5173/');
 
     await page.locator('a[class="navbar__login-btn"]').click();
-    // Realizando login com Admin
-    await page.locator('input[type="email"]').fill('lucas.dpmachado@gmail.com');
-    await page.locator('input[type="password"]').fill('150515@Arua');
+    // Realizando login com o novo usuário
+    await page.locator('input[type="email"]').fill('gintokimachado04@gmail.com');
+    await page.locator('input[type="password"]').fill('150515@teste');
     await page.locator('button[type="submit"]').click();
 
+    // Aguarda o login concluir verificando se o botão do usuário apareceu
+    await expect(page.locator('.navbar__user-btn')).toBeVisible({ timeout: 10000 });
 
     // explorando produtos 
     await page.locator('a.navbar__link[href="/menu"]').click();
