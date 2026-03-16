@@ -31,7 +31,7 @@ test('Adicionando cupom em compras', async ({ page }) => {
     await page.locator('button.navbar__cart-btn').click();
 
     // Adicionando cupom
-    const promoCode = 'vivaloschico30';
+    const promoCode = 'TACO20';
     await page.locator('input[placeholder="Promo code"]').fill(promoCode);
     await page.locator('button:has-text("Apply")').click();
 
