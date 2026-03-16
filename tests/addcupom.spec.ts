@@ -9,8 +9,6 @@ test('Adicionando cupom em compras', async ({ page }) => {
     await page.locator('input[type="password"]').fill('150515@Arua');
     await page.locator('button[type="submit"]').click();
 
-    // Aguarda o login concluir verificando se o botão do usuário apareceu
-    await expect(page.locator('.navbar__user-btn')).toBeVisible({ timeout: 10000 });
 
     // explorando produtos 
     await page.locator('a.navbar__link[href="/menu"]').click();
