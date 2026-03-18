@@ -1,5 +1,5 @@
-// @ts-check
 const { test, expect } = require('@playwright/test');
+const { AuthAPI } = require('./pom/AuthAPI');
 
 test.describe('API de Produtos', () => {
 
@@ -9,15 +9,9 @@ test.describe('API de Produtos', () => {
     let token;
 
     test.beforeAll(async ({ request }) => {
-        // Realizando login como admin para obter o token
-        const response = await request.post('/api/auth/login', {
-            data: {
-                email: 'admin@tacomex.com',
-                password: 'admin123'
-            }
-        });
-        const body = await response.json();
-        token = body.token;
+        // Realizando login como admin usando o POM (AuthAPI) para obter o token
+        const authAPI = new AuthAPI(request);
+        token = await authAPI.loginAdmin();
     });
 
     test.beforeEach(async ({ request }) => {
