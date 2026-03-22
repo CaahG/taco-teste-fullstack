@@ -64,6 +64,6 @@ test.describe('API de Cupons', () => {
         // validar se o cupomid criado esta na lista
         expect(body.promotions).toContainEqual(expect.objectContaining({ id: cupomid }));
         // validar se o codigo do cupom criado esta na lista
-        expect(body.promotions).toContainEqual(expect.objectContaining({ code: codigoCupom }));     
+        expect(body.promotions).toContainEqual(expect.objectContaining({ code: codigoCupom }));
     });
 });

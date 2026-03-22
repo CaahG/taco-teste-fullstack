@@ -46,7 +46,39 @@ test.describe('API de Produtos', () => {
         expect(response.status()).toBe(201);
     });
 
-    test('deve buscar o produto criado na lista', async ({ request }) => {
+    test('criando um novo produto', async ({ request }) => {
+        
+        const nomeProduto = `Pimenta recheada do diabo ${Math.floor(Math.random() * 1000000)}`;
+
+        const produtoTeste = {
+            name: nomeProduto,
+            description: "Pimenta recheada com carne e queijo com jalapeño",
+            price: 25.00,
+            category_id: 1, // Assumindo que a categoria 1 existe 
+            image_url: "https://tacomex-8bit-shop.vercel.app/images/products/taco-1.png",
+            stock_quantity: 100,
+            is_active: true
+        };
+
+        const response = await request.post('/api/products', {
+            data: produtoTeste,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        const body = await response.json();
+        console.log('Resposta criação:', body);
+
+        // Ajuste conforme a estrutura real da API
+        produtoid = body.product.id;
+
+        expect(response.status()).toBe(201);
+    });
+
+
+    test('deve buscar o produto criado na lista com sucesso', async ({ request }) => {
         const response = await request.get('/api/products', {
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -63,5 +95,19 @@ test.describe('API de Produtos', () => {
         expect(produtos).toContainEqual(expect.objectContaining({ id: produtoid }));
         // Validando se o nome do produto criado está na lista
         expect(produtos).toContainEqual(expect.objectContaining({ name: nomeProduto }));
+    });
+
+
+    test('deve deletar um produto específico pelo ID', async ({ request }) => {
+
+        // Mandando a requisição DELETE direto pra ele
+        const response = await request.delete(`/api/products/${produtoid}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        //  Só conferindo se deu certo (status 200 ou 204)
+        expect(response.status()).toBe(200);
     });
 });
