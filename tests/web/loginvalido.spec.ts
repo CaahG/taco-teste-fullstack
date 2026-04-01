@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { AuthPage } from './pom/AuthPage';
 
 test.describe('Logins Válidos', () => {
 
@@ -7,12 +8,8 @@ test.describe('Logins Válidos', () => {
     });
 
     test('realizando login com admin', async ({ page }) => {
-        await page.locator('a[class="navbar__login-btn"]').click();
-
-        // Realizando login com Admin
-        await page.locator('input[type="email"]').fill('admin@tacomex.com');
-        await page.locator('input[type="password"]').fill('admin123');
-        await page.locator('button[type="submit"]').click();
+        const authPage = new AuthPage(page);
+        await authPage.loginAdmin();
 
         // Explorando o menu e adicionando um produto
         await page.locator('a:has-text("Menu")').filter({ hasText: /^Menu$/ }).first().click();
@@ -21,7 +18,8 @@ test.describe('Logins Válidos', () => {
         await page.locator('input[placeholder="Search menu..."]').fill('Churro Combo');
 
         // Adicionando um produto ao carrinho
-        await page.locator('button[title="Add to Cart"]').click();
+        const productCard = page.locator('.product-card').filter({ hasText: 'Churro Combo' });
+        await productCard.locator('button[title="Add to Cart"]').click();
         await page.locator('button[aria-label="Increase quantity"]').click();
 
         // Verificando se a quantidade foi atualizada para '2' dentro do item do carrinho
@@ -47,12 +45,8 @@ test.describe('Logins Válidos', () => {
     });
 
     test('realizando login com customer', async ({ page }) => {
-        await page.locator('a[class="navbar__login-btn"]').click();
-
-        // Realizando login com Customer
-        await page.locator('input[type="email"]').fill('customer@tacomex.com');
-        await page.locator('input[type="password"]').fill('pass123');
-        await page.locator('button[type="submit"]').click();
+        const authPage = new AuthPage(page);
+        await authPage.loginCustomer();
 
         // Explorando produtos 
         await page.locator('a.navbar__link[href="/menu"]').click();

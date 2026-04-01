@@ -1,18 +1,15 @@
 import { test, expect } from '@playwright/test';
+import { AuthPage } from './pom/AuthPage';
 
 test.describe('Mudando status dos pedidos já feitos', () => {
     test.beforeEach(async ({ page }) => {
         await page.goto('http://localhost:5173/');
 
-        // Realizando login com Admin
-        await page.locator('a[class="navbar__login-btn"]').click();
-        await page.locator('input[type="email"]').fill('admin@tacomex.com');
-        await page.locator('input[type="password"]').fill('admin123');
-        await page.locator('button[type="submit"]').click();
+        const authPage = new AuthPage(page);
+        await authPage.loginAdmin();
 
         // Espera login e clica no botão do usuário para abrir o menu dropdown
         const userBtn = page.locator('.navbar__user-btn');
-        await expect(userBtn).toBeVisible({ timeout: 10000 });
         await userBtn.click();
 
         // Acessa o Painel Admin via dropdown
@@ -22,8 +19,8 @@ test.describe('Mudando status dos pedidos já feitos', () => {
         await page.getByRole('link', { name: 'Orders', exact: true }).click();
     });
 
-    test('mudando status do pedido #0048 para PREPARING - Bilbo Bolseiro', async ({ page }) => {
-        const orderCard = page.locator('.admin-orders__card').filter({ hasText: '#0048' });
+    test('mudando status do pedido #0050 para PREPARING - Customer', async ({ page }) => {
+        const orderCard = page.locator('.admin-orders__card').filter({ hasText: '#0050' }).filter({ hasText: 'customer@tacomex.com' });
         await expect(orderCard).toBeVisible({ timeout: 10000 });
         await orderCard.getByRole('button', { name: 'Update Status' }).click();
 
@@ -35,7 +32,7 @@ test.describe('Mudando status dos pedidos já feitos', () => {
         await page.reload();
 
         // Verifica se o status foi alterado com sucesso no badge após o reload
-        const updatedOrderCard = page.locator('.admin-orders__card').filter({ hasText: '#0048' });
+        const updatedOrderCard = page.locator('.admin-orders__card').filter({ hasText: '#0050' }).filter({ hasText: 'customer@tacomex.com' });
         await expect(updatedOrderCard.locator('.order-status-badge__label')).toHaveText('Preparing');
     });
 
