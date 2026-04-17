@@ -2,20 +2,21 @@ import { APIRequestContext } from '@playwright/test';
 
 export class NotificationAPI {
     readonly request: APIRequestContext;
+    readonly token: string;
 
-    constructor(request: APIRequestContext) {
+    constructor(request: APIRequestContext, token: string) {
         this.request = request;
+        this.token = token;
     }
 
     /**
      * Busca a lista de notificações do usuário autenticado
-     * @param token Token de autenticação Bearer
      * @returns Objeto contendo a lista de notificações e paginação
      */
-    async getNotifications(token: string) {
+    async getNotifications() {
         const response = await this.request.get('/api/notifications', {
             headers: {
-                'Authorization': `Bearer ${token}`,
+                'Authorization': `Bearer ${this.token}`,
                 'Accept': 'application/json'
             }
         });
